@@ -41,7 +41,9 @@ var TextPokerForm = React.createClass({
                 });
             });
         } else if (command == "resetDeck") {
-            UnaController.sendToServer("resetDeck", {});
+            UnaController.sendToServer("resetDeck", {}, function(res) {
+              console.log("ResetDeck res" , res);
+            });
         }
 
 

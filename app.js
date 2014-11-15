@@ -87,7 +87,7 @@ una.server_mode.registerOnControllerInput('resetDeck',
       return o;};
     state.hands.__drawPile = shuffle(state.hands.__drawPile);
 
-    //UnaServer.sendToControllers('update', state);
+    UnaServer.sendToControllers('update', state);
     return { success: true }
   });
 
@@ -110,15 +110,12 @@ una.server_mode.registerOnControllerInput('draw',
       state.hands.__drawPile = state.hands.__drawPile.slice(payload.numDraw);
       state.hands[payload.playerId] = state.hands[payload.playerId].concat(cards);
     } else {
-      UnaServer.sendToControllers('update', state);
-      /* TODO
       return { success: false, hand: state.hands[payload.receiver],
                error: "DrawPile is empty" };
-               */
     }
 
     UnaServer.sendToControllers('update', state);
-    // return { success: true, hand: state.hands[payload.receiver] }; TODO
+    return { success: true, hand: state.hands[payload.receiver] };
   });
 
 
@@ -154,7 +151,7 @@ una.server_mode.registerOnControllerInput('distribute',
       }
     }
     UnaServer.sendToControllers('update', state);
-    // return { success: true }; TODO
+    return { success: true };
   });
 
 
@@ -165,11 +162,8 @@ una.server_mode.registerOnControllerInput('distribute',
 una.server_mode.registerOnControllerInput('discard',
   function(UnaServer, una_header, payload) {
     if (!state.connectedPlayers.contains(payload.playerId)) {
-      UnaServer.sendToControllers('update', state);
-      /* TODO
       return { success: false,
                error: "Player "+payload.playerId+" is no longer connected" }
-               */
     }
 
     var state = UnaServer.getState();
@@ -177,15 +171,12 @@ una.server_mode.registerOnControllerInput('discard',
 
     var result = moveCards(state, payload.cards, payload.playerId, "__discardPile");
     if (!result) {
-      UnaServer.sendToControllers('update', state);
-      /* TODO
       return { success: false,
                error: "Unable to move cards " + payload.cards }
-               */
     }
 
     UnaServer.sendToControllers('update', state);
-    // return { success: true, hand: state.hands[payload.playerId] } TODO
+    return { success: true, hand: state.hands[payload.playerId] }
   });
 
 
@@ -197,11 +188,9 @@ una.server_mode.registerOnControllerInput('getMyHand',
   function(UnaServer, una_header, payload) {
     // TODO: Might need to parseInt on player ID
     if (!state.connectedPlayers.contains(payload.playerId)) {
-      UnaServer.sendToControllers('update', state);
-      // return { success: false } TODO
+      return { success: false }
     } else {
-      UnaServer.sendToControllers('update', state);
-      // return { success: true, hand: state.hands[payload.playerId] }; TODO
+      return { success: true, hand: state.hands[payload.playerId] };
     }
   });
 
@@ -214,20 +203,18 @@ una.server_mode.registerOnControllerInput('sendCardsToPlayer',
   function(UnaServer, una_header, payload) {
     if (!state.connectedPlayers.contains(payload.senderId)
         || !state.connectedPlayes.contains(payload.receiverId)) {
-      UnaServer.sendToControllers('update', state);
-      // return { success: false }; TODO
+      // UnaServer.sendToControllers('update', state);
+      return { success: false };
     }
 
     var result = moveCards(state, payload.cards, payload.senderId, payload.receiverId);
     if (!result) {
-      UnaServer.sendToControllers('update', state);
-      /* TODO
+      //UnaServer.sendToControllers('update', state);
       return { success: false,
                error: "Unable to move cards " + payload.cards }
-               */
     } else {
       UnaServer.sendToControllers('update', state);
-      // return { success: true, hand: state.hands[payload.senderId] }; TODO
+      return { success: true, hand: state.hands[payload.senderId] };
     }
   });
 
