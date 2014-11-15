@@ -1,6 +1,5 @@
 var path = require('path');
 var una = require('una');
-var routes = require('./routes');
 var express = una.express;
 var app = una.app;
 var http = require('http');
@@ -17,7 +16,7 @@ app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/controller', routes.controller);
+//app.get('/controller', routes.controller);
 
 
 // Enable screenless

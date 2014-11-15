@@ -28,12 +28,31 @@ var TextPokerStateList = React.createClass({
 });
 
 var TextPokerForm = React.createClass({
+    processCommand: function(command) {
+        if (command == "start") {
+            var that = this;
+            UnaController.register('room1', {name: ''}, function(res) {
+                //that.props.onCommandSubmit(JSON.stringify(res.state));
+                console.log(res.state);
+                UnaController.onServerInput("update", function(res) {
+                    console.log(res.payload);
+                    console.log(res);
+                    //that.props.onCommandSubmit(JSON.stringify(res.payload));
+                });
+            });
+        } else if (command == "resetDeck") {
+            UnaController.sendToServer("resetDeck", {});
+        }
+
+
+    },
+
     handleSubmit: function(event) {
         event.preventDefault();
         // Do something with the input here
-        var commands = this.refs.commands.getDOMNode().value.trim();
+        var command = this.refs.commands.getDOMNode().value.trim();
+        this.processCommand(command);
 
-        this.props.onCommandSubmit({commands: commands});
         this.refs.commands.getDOMNode().value = '';
     },
 
@@ -48,12 +67,12 @@ var TextPokerForm = React.createClass({
 
 var TextPoker = React.createClass({
     getInitialState: function() {
-        return {data: ['123', '234']};
+        return {data: []};
     },
 
-    handleCommandSubmit: function(commands) {
+    handleCommandSubmit: function(state) {
         var data = this.state.data;
-        data.push(commands);
+        data.push(state);
         this.setState({data: data});
     },
 
