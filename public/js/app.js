@@ -47,7 +47,7 @@ function HandCtrl ($scope) {
   $scope.cards = createCards([]);
 
   $scope.startGame = function () {
-    UnaController.register('room1', {name: ''}, function(res) { 
+    UnaController.register('room1', {name: 'Iambot'}, function(res) { 
       UnaController.onServerInput('update', function (res) {
         UnaController.sendToServer('getMyHand', {}, function (res) {
           if (res.success) {
