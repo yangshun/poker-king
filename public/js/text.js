@@ -1,49 +1,20 @@
-var TextPokerState = React.createClass({
-    render: function() {
-        return (
-            <td>
-                {this.props.children}
-            </td>
-        )
-    }
-});
-
-var TextPokerStateList = React.createClass({
-    render: function() {
-        var list = this.props.data.map(function(state) {
-            return (
-            <tr>
-            <TextPokerState>
-                {state}
-            </TextPokerState>
-            </tr>
-            );
-        });
-        return (
-            <table>
-            {list}
-            </table>
-        )
-    }
-});
-
 var TextPokerForm = React.createClass({
     processCommand: function(command) {
-        if (command == "start") {
+        command = command.split(" ");
+        var callback = function(res) {
+            console.log(res);
+        };
+
+        if (command[0] == "start") {
             var that = this;
             UnaController.register('room1', {name: ''}, function(res) {
-                //that.props.onCommandSubmit(JSON.stringify(res.state));
                 console.log(res.state);
-                UnaController.onServerInput("update", function(res) {
-                    console.log(res.payload);
-                    console.log(res);
-                    //that.props.onCommandSubmit(JSON.stringify(res.payload));
-                });
+                UnaController.onServerInput("update", callback);
             });
-        } else if (command == "resetDeck") {
-            UnaController.sendToServer("resetDeck", {}, function(res) {
-              console.log("ResetDeck res" , res);
-            });
+        } else if (command[0] == "resetDeck") {
+            UnaController.sendToServer("resetDeck", {}, callback);
+        } else if (command[0] == "draw") {
+            UnaController.sendToServer("draw", parseInt(command[1], 10));
         }
 
 
