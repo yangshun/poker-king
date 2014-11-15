@@ -14,7 +14,14 @@ var TextPokerForm = React.createClass({
         } else if (command[0] == "resetDeck") {
             UnaController.sendToServer("resetDeck", {}, callback);
         } else if (command[0] == "draw") {
-            UnaController.sendToServer("draw", parseInt(command[1], 10));
+            var numDraw = parseInt(command[1],10);
+            UnaController.sendToServer("draw", {numDraw: numDraw}, callback);
+        } else if (command[0] == "getMyHand") {
+            UnaController.sendToServer("getMyHand", {}, callback);
+        } else if (command[0] == "discard") {
+            UnaController.sendToServer("discard", {cards: command.slice(1)}, callback);
+        } else if (command[0] == "distribute") {
+            UnaController.sendToServer("distribute", {}, callback);
         }
 
 
@@ -52,7 +59,6 @@ var TextPoker = React.createClass({
     render: function() {
         return (
             <div>
-                <TextPokerStateList data={this.state.data} />
                 <TextPokerForm onCommandSubmit={this.handleCommandSubmit}/>
             </div>
         )

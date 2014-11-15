@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "jade": "0.35.0",
+    "lodash": "^2.4.1",
     "una": "git://github.com/chunmun/una.git"
   }
 }
