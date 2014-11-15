@@ -20,6 +20,8 @@ var TextPokerForm = React.createClass({
             UnaController.sendToServer("getMyHand", {}, callback);
         } else if (command[0] == "discard") {
             UnaController.sendToServer("discard", {cards: command.slice(1)}, callback);
+        } else if (command[0] == "distribute") {
+            UnaController.sendToServer("distribute", {}, callback);
         }
 
 
