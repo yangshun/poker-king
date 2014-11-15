@@ -2,7 +2,6 @@ var path = require('path');
 var una = require('una');
 var express = una.express;
 var app = una.app;
-var routes = require('./routes');
 var http = require('http');
 
 // App setup
