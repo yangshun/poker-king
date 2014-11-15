@@ -3,6 +3,7 @@ var una = require('una');
 var express = una.express;
 var app = una.app;
 var http = require('http');
+var _ = require('lodash');
 
 // App setup
 app.set('port', process.env.PORT || 3216);
@@ -34,12 +35,14 @@ una.server_mode.registerInitState({
 });
 
 function playerHasCards(state, playerId, cards) {
-  for (var card in cards) {
-    if (!state.hands[playerId].indexOf(card) > -1) {
-      return false;
-    }
-  }
-  return true;
+    console.log("here");
+    var found = true;
+    cards.forEach(function(card) {
+        if (state.hands[playerId].indexOf(card) === -1) {
+            found = false;
+        }
+    });
+    return found;
 }
 
 
@@ -48,16 +51,11 @@ function moveCards(state, cards, fromPlayer, toPlayer) {
     return false;
   }
 
-  state.hands[toPlayer] = state.hands[toPlayer].extend(
-    state.hands[fromPlayer].filter(
-    function (e) {
-      return cards.indexOf(e) > -1; // Note: no ! on this
-    })
-  );
+  state.hands[toPlayer] = _.extend(state.hands[toPlayer], cards);
 
   state.hands[fromPlayer] = state.hands[fromPlayer].filter(
     function (e) {
-      return cards.indexOf(e) > -1; // Note: ! on this
+      return cards.indexOf(e) === -1; // Note: ! on this
     });
   return true;
 }
@@ -183,7 +181,7 @@ una.server_mode.registerOnControllerInput('discard',
                error: "Player "+una_header.id+" is no longer connected" }
     }
 
-    payload.cards = payload.cards.map(function (e) { return parseInt(e); });
+    payload.cards = payload.cards.map(function (e) { return parseInt(e, 10); });
 
     var result = moveCards(state, payload.cards, una_header.id, "__discardPile");
     if (!result) {
