@@ -21,13 +21,15 @@ function HandCtrl ($scope) {
       var numDraw = parseInt(command[1],10);
       UnaController.sendToServer("draw", {numDraw: numDraw}, callback);
     } else if (command[0] == "getMyHand") {
-      UnaController.sendToServer("getMyHand", {}, callback);
-    } else if (command[0] == "discard") {
-      UnaController.sendToServer("discard", {cards: command.slice(1)}, callback);
+      
     } else if (command[0] == "distribute") {
-      UnaController.sendToServer("distribute", {}, callback);
+      
     }
   }
+
+  UnaController.sendToServer('distribute', {}, function (res) {
+
+  });
 
   $scope.getCardFromIndex = function (index) {
     index = parseInt(index);
@@ -47,23 +49,25 @@ function HandCtrl ($scope) {
   $scope.startGame = function () {
     UnaController.register('room1', {name: ''}, function(res) { 
       UnaController.onServerInput('update', function (res) {
-        console.log('update', res);
+        UnaController.sendToServer('getMyHand', {}, function (res) {
+          if (res.success) {
+            $scope.cards = createCards(res.hand);
+            $scope.$apply();
+          }
+        });
       });
     });
   };
 
   $scope.resetDeck = function () {
     UnaController.sendToServer('resetDeck', {}, function (res) {
-      if (res.success) {
-        $scope.cards = createCards([]);
-      }
+
     });
   };
 
   $scope.drawCards = function (amt) {
     UnaController.sendToServer('draw', {numDraw: amt}, function (res) {
-      $scope.cards = createCards(res.hand);
-      $scope.$apply();
+
     });
   };
 
@@ -75,10 +79,7 @@ function HandCtrl ($scope) {
     UnaController.sendToServer('discard', {
       cards: cardsToDiscard
     }, function (res) {
-      if (res.success) {
-        $scope.cards = createCards(res.hand);
-        $scope.$apply();
-      }
+
     });
   }
 }
