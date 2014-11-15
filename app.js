@@ -16,6 +16,8 @@ app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
+//app.get('/controller', routes.controller);
+
 
 // Enable screenless
 una.enableServerMode();
@@ -85,6 +87,7 @@ una.server_mode.registerOnControllerInput('resetDeck',
       return o;};
     state.hands.__drawPile = shuffle(state.hands.__drawPile);
 
+    UnaServer.sendToControllers('update', state);
     return { success: true }
   });
 
@@ -111,6 +114,7 @@ una.server_mode.registerOnControllerInput('draw',
                error: "DrawPile is empty" };
     }
 
+    UnaServer.sendToControllers('update', state);
     return { success: true, hand: state.hands[payload.receiver] };
   });
 
@@ -146,6 +150,7 @@ una.server_mode.registerOnControllerInput('distribute',
         state.hands.__drawPile = state.hands.__drawPile.slice(avg);
       }
     }
+    UnaServer.sendToControllers('update', state);
     return { success: true };
   });
 
@@ -170,6 +175,7 @@ una.server_mode.registerOnControllerInput('discard',
                error: "Unable to move cards " + payload.cards }
     }
 
+    UnaServer.sendToControllers('update', state);
     return { success: true, hand: state.hands[payload.playerId] }
   });
 
@@ -183,8 +189,9 @@ una.server_mode.registerOnControllerInput('getMyHand',
     // TODO: Might need to parseInt on player ID
     if (!state.connectedPlayers.contains(payload.playerId)) {
       return { success: false }
+    } else {
+      return { success: true, hand: state.hands[payload.playerId] };
     }
-    return { success: true, hand: state.hands[payload.playerId] };
   });
 
 
@@ -196,16 +203,19 @@ una.server_mode.registerOnControllerInput('sendCardsToPlayer',
   function(UnaServer, una_header, payload) {
     if (!state.connectedPlayers.contains(payload.senderId)
         || !state.connectedPlayes.contains(payload.receiverId)) {
+      // UnaServer.sendToControllers('update', state);
       return { success: false };
     }
 
     var result = moveCards(state, payload.cards, payload.senderId, payload.receiverId);
     if (!result) {
+      //UnaServer.sendToControllers('update', state);
       return { success: false,
                error: "Unable to move cards " + payload.cards }
+    } else {
+      UnaServer.sendToControllers('update', state);
+      return { success: true, hand: state.hands[payload.senderId] };
     }
-
-    return { success: true, hand: state.hands[payload.senderId] };
   });
 
 
