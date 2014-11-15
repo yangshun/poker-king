@@ -1,8 +1,9 @@
-var cards = [
-  { type: 1 },
-  { type: 2 },
-  { type: 3 }
-];
+var cards = [];
+for (var i = 0; i < 53; i++) {
+  cards.push({
+    type: i
+  });
+} 
 
 var CardsBox = React.createClass({
   getInitialState: function() {
@@ -52,8 +53,7 @@ var CardsList = React.createClass({
   render: function() {
     var cardNodes = this.props.data.map(function (card) {
       return (
-        <Card class={"card-"+card.type}>
-          {card.type}
+        <Card value={card.type}>
         </Card>
       );
     });
@@ -65,11 +65,24 @@ var CardsList = React.createClass({
   }
 });
 
+function getCardFromIndex (index) {
+  if (index < 52) {
+    var index = parseInt(index);
+    var suits = ['C', 'D', 'H', 'S'];
+    var ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+    var suit = index % 4;
+    var rank = Math.floor(index/4);
+    return ranks[rank] + suits[suit];
+  } else {
+    return 'facedown';
+  }
+}
+
 var Card = React.createClass({
   render: function() {
+
     return (
-      <div className={this.props.class}>
-      </div>
+      <img className="card" src={"img/" + getCardFromIndex(parseInt(this.props.value)) + ".png"}/>
     );
   }
 });
