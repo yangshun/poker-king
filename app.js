@@ -133,13 +133,26 @@ una.server_mode.registerOnControllerInput('draw',
 
 
 // Takes the cards in the __drawPile and distributes to every player evenly
-// if possible. Else the first t players will have 1 more card than the rest
-// Payload : {}
+// #numDraw cards. Else the first t players will have 1 more card than the rest
+// Payload : { numDraw : 3 }
 // Success : { success: true }
 // Failure : { success: false }
 una.server_mode.registerOnControllerInput('distribute',
         function(UnaServer, una_header, payload) {
             var state = UnaServer.getState();
+            if (state.hands.__drawPile.length
+                  < payload.numDraw * state.connectedPlayers.length) {
+              return { success: false,
+                       error: "NumDraw is too big to distribute" };
+            }
+
+            for (var i=0;i<state.connectedPlayers.length;i++) {
+                var player = state.connectedPlayers[i];
+                state.hands[player] = state.hands.__drawPile.slice(0, payload.numDraw);
+                state.hands.__drawPile = state.hands.__drawPile.slice(payload.numDraw);
+            }
+
+            /*
             var avg = state.hands.__drawPile.length / state.connectedPlayers.length;
             if (avg != Math.floor(avg)) {
                 var high = Math.ceil(avg);
@@ -165,6 +178,7 @@ una.server_mode.registerOnControllerInput('distribute',
                     state.hands.__drawPile = state.hands.__drawPile.slice(avg);
                 }
             }
+            */
             UnaServer.sendToControllers('update', state);
             return { success: true };
         });
