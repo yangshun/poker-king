@@ -2,7 +2,21 @@
   background-color: #fff;
   border: 1px solid #eee;
   border-radius: 5px;
+  cursor: pointer;
   display: inline-block;
   margin: 0 10px;
   width: 75px;
+  transition: all .3s;
+}
+
+.card:hover {
+  -webkit-box-shadow: 0px 0px 15px 0px #09c;
+  -moz-box-shadow: 0px 0px 15px 0px #09c;
+  box-shadow: 0px 0px 15px 0px #09c;
+}
+
+.card.card-selected {
+  -webkit-box-shadow: 0px 0px 15px 0px rgba(255,0,0,1);
+  -moz-box-shadow: 0px 0px 15px 0px rgba(255,0,0,1);
+  box-shadow: 0px 0px 15px 0px rgba(255,0,0,1);
 }
