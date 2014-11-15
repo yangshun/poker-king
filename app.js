@@ -1,5 +1,6 @@
 var path = require('path');
 var una = require('una');
+var routes = require('./routes');
 var express = una.express;
 var app = una.app;
 var http = require('http');
@@ -15,6 +16,8 @@ app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/controller', routes.controller);
 
 
 // Enable screenless
@@ -85,7 +88,8 @@ una.server_mode.registerOnControllerInput('resetDeck',
       return o;};
     state.hands.__drawPile = shuffle(state.hands.__drawPile);
 
-    return { success: true }
+    UnaServer.sendToControllers('update', state);
+    // return { success: true } TODO
   });
 
 
@@ -107,11 +111,15 @@ una.server_mode.registerOnControllerInput('draw',
       state.hands.__drawPile = state.hands.__drawPile.slice(payload.numDraw);
       state.hands[payload.playerId] = state.hands[payload.playerId].concat(cards);
     } else {
+      UnaServer.sendToControllers('update', state);
+      /* TODO
       return { success: false, hand: state.hands[payload.receiver],
                error: "DrawPile is empty" };
+               */
     }
 
-    return { success: true, hand: state.hands[payload.receiver] };
+    UnaServer.sendToControllers('update', state);
+    // return { success: true, hand: state.hands[payload.receiver] }; TODO
   });
 
 
@@ -146,7 +154,8 @@ una.server_mode.registerOnControllerInput('distribute',
         state.hands.__drawPile = state.hands.__drawPile.slice(avg);
       }
     }
-    return { success: true };
+    UnaServer.sendToControllers('update', state);
+    // return { success: true }; TODO
   });
 
 
@@ -157,8 +166,11 @@ una.server_mode.registerOnControllerInput('distribute',
 una.server_mode.registerOnControllerInput('discard',
   function(UnaServer, una_header, payload) {
     if (!state.connectedPlayers.contains(payload.playerId)) {
+      UnaServer.sendToControllers('update', state);
+      /* TODO
       return { success: false,
                error: "Player "+payload.playerId+" is no longer connected" }
+               */
     }
 
     var state = UnaServer.getState();
@@ -166,11 +178,15 @@ una.server_mode.registerOnControllerInput('discard',
 
     var result = moveCards(state, payload.cards, payload.playerId, "__discardPile");
     if (!result) {
+      UnaServer.sendToControllers('update', state);
+      /* TODO
       return { success: false,
                error: "Unable to move cards " + payload.cards }
+               */
     }
 
-    return { success: true, hand: state.hands[payload.playerId] }
+    UnaServer.sendToControllers('update', state);
+    // return { success: true, hand: state.hands[payload.playerId] } TODO
   });
 
 
@@ -182,9 +198,12 @@ una.server_mode.registerOnControllerInput('getMyHand',
   function(UnaServer, una_header, payload) {
     // TODO: Might need to parseInt on player ID
     if (!state.connectedPlayers.contains(payload.playerId)) {
-      return { success: false }
+      UnaServer.sendToControllers('update', state);
+      // return { success: false } TODO
+    } else {
+      UnaServer.sendToControllers('update', state);
+      // return { success: true, hand: state.hands[payload.playerId] }; TODO
     }
-    return { success: true, hand: state.hands[payload.playerId] };
   });
 
 
@@ -196,16 +215,21 @@ una.server_mode.registerOnControllerInput('sendCardsToPlayer',
   function(UnaServer, una_header, payload) {
     if (!state.connectedPlayers.contains(payload.senderId)
         || !state.connectedPlayes.contains(payload.receiverId)) {
-      return { success: false };
+      UnaServer.sendToControllers('update', state);
+      // return { success: false }; TODO
     }
 
     var result = moveCards(state, payload.cards, payload.senderId, payload.receiverId);
     if (!result) {
+      UnaServer.sendToControllers('update', state);
+      /* TODO
       return { success: false,
                error: "Unable to move cards " + payload.cards }
+               */
+    } else {
+      UnaServer.sendToControllers('update', state);
+      // return { success: true, hand: state.hands[payload.senderId] }; TODO
     }
-
-    return { success: true, hand: state.hands[payload.senderId] };
   });
 
 
