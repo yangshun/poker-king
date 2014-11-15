@@ -1,17 +1,10 @@
-var cards = [];
-for (var i = 0; i < 53; i++) {
-  cards.push({
-    type: i
-  });
-} 
-
 var CardsBox = React.createClass({
   getInitialState: function() {
-    return {data: cards};
+    return {data: []};
   },
   refreshCards: function (cards) {
     console.log(cards);
-    this.state.data = cards;
+    this.setState({data: _.sortBy(cards)});
   },
   render: function() {
     return (
@@ -27,7 +20,7 @@ var CardsList = React.createClass({
   render: function() {
     var cardNodes = this.props.data.map(function (card) {
       return (
-        <Card value={card.type}>
+        <Card value={card}>
         </Card>
       );
     });
@@ -40,8 +33,8 @@ var CardsList = React.createClass({
 });
 
 function getCardFromIndex (index) {
+  index = parseInt(index);
   if (index < 52) {
-    var index = parseInt(index);
     var suits = ['C', 'D', 'H', 'S'];
     var ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
     var suit = index % 4;
@@ -60,7 +53,4 @@ var Card = React.createClass({
   }
 });
 
-React.render(
-  <CardsBox data={cards}/>,
-  document.getElementById('cards-container')
-);
+var cardsBox = React.render(<CardsBox/>, document.getElementById('cards-container'));

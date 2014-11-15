@@ -59,7 +59,7 @@ var StartGameButton = React.createClass({
     UnaController.register('room1', {name: ''}, function(res) {
       console.log(res.state);
       UnaController.onServerInput("update", function (res) {
-        console.log(res);
+        console.log('update', res);
       });
     });
   },
@@ -73,7 +73,9 @@ var StartGameButton = React.createClass({
 var ResetDeckButton = React.createClass({
   resetDeck: function () {
     UnaController.sendToServer("resetDeck", {}, function (res) {
-      console.log(res);
+      if (res.success) {
+        cardsBox.refreshCards([]);
+      }
     });
   },
   render: function () {
@@ -86,7 +88,7 @@ var ResetDeckButton = React.createClass({
 var DrawCardsButton = React.createClass({
   drawAmount: function () {
     UnaController.sendToServer('draw', {numDraw: this.props.amount}, function (res) {
-      console.log(res);
+      cardsBox.refreshCards(res.hand);
     });
   },
   render: function () {
