@@ -7,6 +7,6 @@
   },
   "dependencies": {
     "jade": "0.35.0",
-    "una": "0.4.3"
+    "una": "git://github.com/chunmun/una.git"
   }
 }

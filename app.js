@@ -88,8 +88,8 @@ una.server_mode.registerOnControllerInput('resetDeck',
       return o;};
     state.hands.__drawPile = shuffle(state.hands.__drawPile);
 
-    UnaServer.sendToControllers('update', state);
-    // return { success: true } TODO
+    //UnaServer.sendToControllers('update', state);
+    return { success: true }
   });
 
 
