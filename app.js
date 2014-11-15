@@ -181,7 +181,8 @@ una.server_mode.registerOnControllerInput('discard',
             UnaServer.sendToControllers('update', state);
             UnaServer.sendToControllers('discard', {
               cards: payload.cards,
-              player: una_header.id
+              playerId: una_header.id,
+              playerName: una_header.user_data.name
             });
             return { success: true, hand: state.hands[una_header.id] }
         });
