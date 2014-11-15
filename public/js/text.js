@@ -60,8 +60,8 @@ var TextPoker = React.createClass({
     render: function() {
         return (
             <div>
-            <TextPokerStateList data={this.state.data} />
-            <TextPokerForm onCommandSubmit={this.handleCommandSubmit}/>
+                <TextPokerStateList data={this.state.data} />
+                <TextPokerForm onCommandSubmit={this.handleCommandSubmit}/>
             </div>
         )
     }
