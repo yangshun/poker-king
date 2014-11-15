@@ -159,6 +159,8 @@ una.server_mode.registerOnControllerInput('distribute',
 // Takes the cards selected by a player and puts them into the __discardPile
 // Payload : { cards: [4,5,3] }
 // Success : { success: true, hand: [1,2,6...] }
+//           -> 'update' broadcast
+//           -> 'discard' broadcast
 // Failure : { success: false }
 una.server_mode.registerOnControllerInput('discard',
         function(UnaServer, una_header, payload) {
@@ -177,6 +179,10 @@ una.server_mode.registerOnControllerInput('discard',
             }
 
             UnaServer.sendToControllers('update', state);
+            UnaServer.sendToControllers('discard', {
+              cards: payload.cards,
+              player: una_header.id
+            });
             return { success: true, hand: state.hands[una_header.id] }
         });
 
