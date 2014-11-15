@@ -5,7 +5,7 @@
 </style>
 
 <link rel="stylesheet" href="css/bootstrap.min.css" />
-<link rel="stylesheet" href="css/text.css" />
+<link rel="stylesheet" href="css/cards.css" />
 </head>
 
 <body>
@@ -15,16 +15,22 @@
         <div class="col-md-6 col-md-offset-3">
             <div id="text_poker">
             </div>
+            <span id="button-start-game-container"></span>
+            <span id="button-reset-deck-container"></span>
+            <div id="button-draw-cards-container"></div>
+            <div id="cards-container">
+            </div>
         </div>
     </div>
 </div>
 
-
-<script src="bower_components/react/react.min.js"></script>
+<script src="bower_components/underscore/underscore-min.js"></script>
+<script src="bower_components/react/react.js"></script>
 <script src="bower_components/react/JSXTransformer.js"></script>
 <script src="socket.io/socket.io.js"></script>
 <script src="una_js/una.js"></script>
-<script type="text/jsx" src="js/text.js">
+<script type="text/jsx" src="js/cards.js"></script>
+<script type="text/jsx" src="js/text.js"></script>
 </script>
 </body>
 
