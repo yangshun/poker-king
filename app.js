@@ -26,7 +26,7 @@ una.enableServerMode();
 una.server_mode.registerInitState({
     numDecks: 1,
     hands: {
-        __drawPile: [],
+    __drawPile: [],
     __discardPile: [],
     __communityPile: []
     // #playerid : [1,2,3,4]
@@ -112,7 +112,7 @@ una.server_mode.registerOnControllerInput('resetDeck',
 una.server_mode.registerOnControllerInput('draw',
         function(UnaServer, una_header, payload) {
             var state = UnaServer.getState();
-            if (!(state.connectedPlayers.indexOf(una_header.id) > -1)) {
+            if (state.connectedPlayers.indexOf(una_header.id) === -1) {
                 return { success: false,
                     error: "Player "+una_header.id+" is no longer connected" }
 
@@ -151,34 +151,6 @@ una.server_mode.registerOnControllerInput('distribute',
                 state.hands[player] = state.hands.__drawPile.slice(0, payload.numDraw);
                 state.hands.__drawPile = state.hands.__drawPile.slice(payload.numDraw);
             }
-
-            /*
-            var avg = state.hands.__drawPile.length / state.connectedPlayers.length;
-            if (avg != Math.floor(avg)) {
-                var high = Math.ceil(avg);
-                var low = Math.floor(avg);
-                var t = state.hands.__drawPile.length % state.connectedPlayers.length;
-
-                for (var i=0;i<state.connectedPlayers.length;i++) {
-                    var player = state.connectedPlayers[i];
-                    if (t > 0) {
-                        state.hands[player] = state.hands.__drawPile.slice(0, high);
-                        state.hands.__drawPile = state.hands.__drawPile.slice(high);
-                    } else {
-                        // Sad players will less cards
-                        state.hands[player] = state.hands.__drawPile.slice(0, low);
-                        state.hands.__drawPile = state.hands.__drawPile.slice(low);
-                    }
-                    t--;
-                }
-            } else {
-                for (var i=0;i<state.connectedPlayers.length;i++) {
-                    var player = state.connectedPlayers[i];
-                    state.hands[player] = state.hands.__drawPile.slice(0, avg);
-                    state.hands.__drawPile = state.hands.__drawPile.slice(avg);
-                }
-            }
-            */
             UnaServer.sendToControllers('update', state);
             return { success: true };
         });
@@ -191,7 +163,7 @@ una.server_mode.registerOnControllerInput('distribute',
 una.server_mode.registerOnControllerInput('discard',
         function(UnaServer, una_header, payload) {
             var state = UnaServer.getState();
-            if (!(state.connectedPlayers.indexOf(una_header.id) > -1)) {
+            if (state.connectedPlayers.indexOf(una_header.id) === -1) {
                 return { success: false,
                     error: "Player "+una_header.id+" is no longer connected" }
             }
@@ -217,7 +189,7 @@ una.server_mode.registerOnControllerInput('getMyHand',
         function(UnaServer, una_header, payload) {
             var state = UnaServer.getState();
             // TODO: Might need to parseInt on player ID
-            if (!(state.connectedPlayers.indexOf(una_header.id) > -1)) {
+            if (state.connectedPlayers.indexOf(una_header.id) === -1) {
                 return { success: false }
             } else {
                 return { success: true, hand: state.hands[una_header.id] };
@@ -233,8 +205,8 @@ una.server_mode.registerOnControllerInput('getMyHand',
 una.server_mode.registerOnControllerInput('sendCardsToPlayer',
         function(UnaServer, una_header, payload) {
             var state = UnaServer.getState();
-            if (!(state.connectedPlayers.indexOf(payload.senderId) > -1)
-                || !(state.connectedPlayes.indexOf(payload.receiverId) > -1)) {
+            if (state.connectedPlayers.indexOf(payload.senderId) === -1
+                || state.connectedPlayes.indexOf(payload.receiverId) === -1) {
                     // UnaServer.sendToControllers('update', state);
                     return { success: false };
                 }
