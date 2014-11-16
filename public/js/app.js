@@ -1,5 +1,6 @@
-function HandCtrl ($scope) {
-  $scope.mode = false;
+function HandCtrl ($scope, $attrs) {
+  $scope.loaded = true;
+  $scope.mode = 'player';
 
   function createCards (cards) {
     var i = 0;
@@ -78,9 +79,13 @@ function HandCtrl ($scope) {
 
   $scope.drawCards = function (amt) {
     UnaController.sendToServer('draw', {numDraw: amt}, function (res) {
-
     });
   };
+
+  $scope.distributeCards = function (amt) {
+    UnaController.sendToServer('distribute', {numDraw: amt}, function (res) {
+    });
+  }
 
   $scope.discardCards = function () {
     var cardsToDiscard = _.pluck(_.filter($scope.cards, function (card) {
@@ -93,4 +98,7 @@ function HandCtrl ($scope) {
 
     });
   }
+
+  if ($attrs.model == 'discard') {$scope.startDiscard();}
+  else {$scope.startGame();}
 }

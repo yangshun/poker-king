@@ -12,6 +12,14 @@
   position: relative;
 }
 
+.discarded-cards-container {
+  height: 300px;
+  margin-bottom: 50px;
+  overflow-x: scroll;
+  overflow-y: visible;
+  position: relative;
+}
+
 .card {
   background-color: #fff;
   border: 1px solid #eee;
@@ -37,4 +45,12 @@
   -moz-box-shadow: 0px 0px 15px 0px #00bc8c;
   box-shadow: 0px 0px 15px 0px #00bc8c;
   transform: translateY(-50px);
+}
+
+.container {
+  visibility: hidden;
+}
+
+.container-loaded {
+  visibility: visible;
 }
