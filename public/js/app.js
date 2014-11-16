@@ -2,35 +2,30 @@ function HandCtrl ($scope) {
   $scope.mode = false;
 
   function createCards (cards) {
+    var i = 0;
     return _.map(cards, function (card) {
+      var style = 'left: ' + i * 10 + '%';
+      console.log(style);
+      i++;
       return {
         selected: false,
-        number: card
+        number: card,
+        style: style
       };
+      
     });
-  }
-
-  function processCommand (command, callback) {
-    command = command.split(" ");
-    if (!callback) {
-      callback = function (res) {
-        console.log(res);
-      };
-    }
-
-    if (command[0] == "draw") {
-      var numDraw = parseInt(command[1],10);
-      UnaController.sendToServer("draw", {numDraw: numDraw}, callback);
-    } else if (command[0] == "getMyHand") {
-      
-    } else if (command[0] == "distribute") {
-      
-    }
   }
 
   UnaController.sendToServer('distribute', {}, function (res) {
 
   });
+
+  $scope.countSelected = function () {
+    var l = _.filter($scope.cards, function (card) {
+      return card.selected;
+    }).length;
+    return l;
+  };
 
   $scope.getCardFromIndex = function (index) {
     index = parseInt(index);
