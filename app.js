@@ -69,7 +69,12 @@ una.server_mode.registerOnControllerConnection(function (UnaServer, socket) {
         state.connectedPlayers.push(socket.id);
         state.playerNames[socket.id] = socket.user_data.name;
     } else if (socket.user_data.type == 'discard') {
-        // TODO
+        UnaServer.sendToControllers('discard', {
+          cards: [],
+          discardPile: state.hands.__discardPile,
+          playerId: "",
+          playerName: ""
+        });
     }
 });
 
@@ -187,6 +192,7 @@ una.server_mode.registerOnControllerInput('discard',
             UnaServer.sendToControllers('update', state);
             UnaServer.sendToControllers('discard', {
               cards: payload.cards,
+              discardPile: state.hands.__discardPile,
               playerId: una_header.id,
               playerName: una_header.user_data.name
             });
