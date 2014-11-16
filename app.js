@@ -92,12 +92,13 @@ una.server_mode.registerOnControllerDisconnection(function (UnaServer, socket) {
     console.log("Someone disconnected", socket);
     console.log(socket);
     var state = UnaServer.getState();
-    if (state.hands[socket.id]) {
+
+    if (socket.user_data.type == 'player') {
         moveCards(state, state.hands[socket.id], socket.id, "__discardPile");
+        delete state.hands[socket.id];
+        delete state.playerNames[socket.id];
+        state.connectedPlayers.splice(state.connectedPlayers.indexOf(socket.id), 1);
     }
-    delete state.hands[socket.id];
-    delete state.playerNames[socket.id];
-    state.connectedPlayers.splice(state.connectedPlayers.indexOf(socket.id), 1);
     UnaServer.sendToControllers('update', state);
     UnaServer.sendToControllers('discard', {
       cards: [],
