@@ -85,6 +85,7 @@ una.server_mode.registerOnControllerConnection(function (UnaServer, socket) {
           playerName: ""
         });
     }
+    UnaServer.sendToControllers('update', state);
 });
 
 una.server_mode.registerOnControllerDisconnection(function (UnaServer, socket) {
@@ -96,6 +97,8 @@ una.server_mode.registerOnControllerDisconnection(function (UnaServer, socket) {
     delete state.hands[socket.id];
     delete state.playerNames[socket.id];
     state.connectedPlayers = state.connectedPlayers.splice(state.connectedPlayers.indexOf(socket.id), 1);
+
+    UnaServer.sendToControllers('update', state);
 });
 
 // Resets the drawPile with numDecks deck of cards. Zeros all other hands
