@@ -47,7 +47,7 @@
   transform: translateY(-50px);
 }
 
-.container-fluid {
+.container, .container-fluid {
   visibility: hidden;
 }
 

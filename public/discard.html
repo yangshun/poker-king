@@ -12,14 +12,14 @@
 <nav class="navbar navbar-inverse" role="navigation">
     <h3 class="title">Poker King</h3>
 </nav>
-<div class="container" ng-class="{'container-loaded': loaded}">
+<div class="container-fluid" ng-class="{'container-loaded': loaded}">
   <div class="row">
     <div class="col-md-6 col-md-offset-3">
       <div class="discarded-cards-container">
         <img ng-repeat="card in cards" class="card {{{true: 'card-selected'}[card.selected]}}" ng-src="img/{{getCardFromIndex(card)}}.png"} ng-click="card.selected = !card.selected" style="{{card.style}}">
       </div>
       <button class="btn btn-danger btn-block" ng-click="resetDeck()">Reset Deck</button>
-      <button class="btn btn-success btn-block" ng-click="distributeCards(13)">Distribute 13</button>
+      <button class="btn btn-success btn-block" ng-click="distributeEvenly()">Distribute 13</button>
     </div>
   </div>
 </div>
