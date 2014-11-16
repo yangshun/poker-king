@@ -1,5 +1,7 @@
 function HandCtrl ($scope) {
   $scope.mode = false;
+  $scope.loaded = true;;
+
 
   function createCards (cards) {
     return _.map(cards, function (card) {
