@@ -174,9 +174,46 @@ una.server_mode.registerOnControllerInput('distribute',
                 state.hands.__drawPile = state.hands.__drawPile.slice(payload.numDraw);
             }
             UnaServer.sendToControllers('update', state);
-            console.log('[DISTRIBUTE]', state);
             return { success: true };
         });
+
+// Takes the cards in the __drawPile and distributes to every player evenly
+// based on #players. Else the first t players will have 1 more card than the rest
+// Payload : { }
+// Success : { success: true }
+// Failure : { success: false }
+una.server_mode.registerOnControllerInput('distributeEvenly',
+        function(UnaServer, una_header, payload) {
+            var state = UnaServer.getState();
+            var avg = state.hands.__drawPile.length / state.connectedPlayers.length;
+            if (avg != Math.floor(avg)) {
+              var high = Math.ceil(avg);
+              var low = Math.floor(avg);
+              var t = state.hands.__drawPile.length % state.connectedPlayers.length;
+
+              for (var i=0;i<state.connectedPlayers.length;i++) {
+                  var player = state.connectedPlayers[i];
+                  if (i < t) {
+                    state.hands[player] = state.hands.__drawPile.slice(0, high);
+                    state.hands.__drawPile = state.hands.__drawPile.slice(high);
+                  } else {
+                    state.hands[player] = state.hands.__drawPile.slice(0, low);
+                    state.hands.__drawPile = state.hands.__drawPile.slice(low);
+                  }
+              }
+
+            } else {
+              for (var i=0;i<state.connectedPlayers.length;i++) {
+                  var player = state.connectedPlayers[i];
+                  state.hands[player] = state.hands.__drawPile.slice(0, payload.numDraw);
+                  state.hands.__drawPile = state.hands.__drawPile.slice(payload.numDraw);
+              }
+            }
+
+            UnaServer.sendToControllers('update', state);
+            return { success: true };
+        });
+
 
 
 // Takes the cards selected by a player and puts them into the __discardPile
