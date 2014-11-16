@@ -1,6 +1,6 @@
 function HandCtrl ($scope, $attrs) {
   $scope.loaded = true;
-  $scope.mode = false;
+  $scope.mode = 'player';
 
   function createCards (cards) {
     return _.map(cards, function (card) {
@@ -104,5 +104,6 @@ function HandCtrl ($scope, $attrs) {
     });
   }
 
-  if ($attrs.model == 'discard') $scope.startDiscard();
+  if ($attrs.model == 'discard') {$scope.startDiscard();}
+  else {$scope.startGame();}
 }

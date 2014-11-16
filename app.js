@@ -174,6 +174,7 @@ una.server_mode.registerOnControllerInput('distribute',
                 state.hands.__drawPile = state.hands.__drawPile.slice(payload.numDraw);
             }
             UnaServer.sendToControllers('update', state);
+            console.log('[DISTRIBUTE]', state);
             return { success: true };
         });
 
