@@ -12,8 +12,9 @@
 <nav class="navbar navbar-inverse" role="navigation">
     <h3 class="title">Poker King</h3>
 </nav>
-<div class="container-fluid" ng-class="{'container-loaded': loaded}">
 
+<div class="container-fluid" ng-class="{'container-loaded': loaded}">
+    <b>{{playerName}}</b>
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
 
@@ -30,7 +31,6 @@
                 <div class="col-md-4">
                     Draw Cards:
                 </div>
-                <button class="btn btn-info btn-block" ng-click="count()">Count</button>
                 <div class="col-md-8">
                     <div class="btn-group" role="group">
                         <button ng-repeat="number in [1,2,3,4,5]" type="button" class="btn btn-default" ng-click="drawCards(number)">

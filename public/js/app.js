@@ -104,7 +104,9 @@ function HandCtrl ($scope, $attrs) {
   };
 
   $scope.startGame = function () {
-    UnaController.register('room1', {name: haiku(), type: 'player'}, function(res) { 
+    var name = haiku();
+    $scope.playerName = name;
+    UnaController.register('room1', {name: name, type: 'player'}, function(res) { 
       $scope.mode = 'player';
       $scope.$apply();
       UnaController.onServerInput('update', function (res) {
