@@ -90,15 +90,21 @@ una.server_mode.registerOnControllerConnection(function (UnaServer, socket) {
 
 una.server_mode.registerOnControllerDisconnection(function (UnaServer, socket) {
     console.log("Someone disconnected", socket);
+    console.log(socket);
     var state = UnaServer.getState();
     if (state.hands[socket.id]) {
         moveCards(state, state.hands[socket.id], socket.id, "__discardPile");
     }
     delete state.hands[socket.id];
     delete state.playerNames[socket.id];
-    state.connectedPlayers = state.connectedPlayers.splice(state.connectedPlayers.indexOf(socket.id), 1);
-
+    state.connectedPlayers.splice(state.connectedPlayers.indexOf(socket.id), 1);
     UnaServer.sendToControllers('update', state);
+    UnaServer.sendToControllers('discard', {
+      cards: [],
+      discardPile: state.hands.__discardPile,
+      playerId: "",
+      playerName: ""
+    });
 });
 
 // Resets the drawPile with numDecks deck of cards. Zeros all other hands
