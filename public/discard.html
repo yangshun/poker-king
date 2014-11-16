@@ -12,21 +12,21 @@
 <nav class="navbar navbar-inverse" role="navigation">
     <h3 class="title">Poker King</h3>
 </nav>
-<div class="container" ng-class="{'container-loaded': loaded}">
+<div class="container-fluid" ng-class="{'container-loaded': loaded}">
   <div class="row">
     <div class="col-md-6 col-md-offset-3">
-      <button class="btn btn-danger" ng-click="resetDeck()">Reset Deck</button>
-      <button class="btn btn-success" ng-click="distributeEvenly()">Distribute</button>
-
       <div class="discarded-cards-container">
-        <img ng-repeat="card in cards" class="card {{{true: 'card-selected'}[card.selected]}}" ng-src="img/{{getCardFromIndex(card.number)}}.png"} ng-click="card.selected = !card.selected" style="{{card.style}}">
+        <img ng-repeat="card in cards" class="card {{{true: 'card-selected'}[card.selected]}}" ng-src="img/{{getCardFromIndex(card)}}.png"} ng-click="card.selected = !card.selected" style="{{card.style}}">
       </div>
+      <button class="btn btn-danger btn-block" ng-click="resetDeck()">Reset Deck</button>
+      <button class="btn btn-success btn-block" ng-click="distributeEvenly()">Distribute 13</button>
     </div>
   </div>
 </div>
 
 <script src="bower_components/underscore/underscore-min.js"></script>
 <script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="socket.io/socket.io.js"></script>
 <script src="una_js/una.js"></script>
 <script src="js/app.js"></script>
