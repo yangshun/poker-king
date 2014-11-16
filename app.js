@@ -184,7 +184,6 @@ una.server_mode.registerOnControllerInput('distribute',
 // Failure : { success: false }
 una.server_mode.registerOnControllerInput('distributeEvenly',
         function(UnaServer, una_header, payload) {
-            console.log("[DISTRIBUTE]");
             var state = UnaServer.getState();
             var avg = state.hands.__drawPile.length / state.connectedPlayers.length;
             if (avg != Math.floor(avg)) {
@@ -201,13 +200,14 @@ una.server_mode.registerOnControllerInput('distributeEvenly',
                     state.hands[player] = state.hands.__drawPile.slice(0, low);
                     state.hands.__drawPile = state.hands.__drawPile.slice(low);
                   }
+                  console.log(state.hands);
               }
 
             } else {
               for (var i=0;i<state.connectedPlayers.length;i++) {
                   var player = state.connectedPlayers[i];
-                  state.hands[player] = state.hands.__drawPile.slice(0, payload.numDraw);
-                  state.hands.__drawPile = state.hands.__drawPile.slice(payload.numDraw);
+                  state.hands[player] = state.hands.__drawPile.slice(0, avg);
+                  state.hands.__drawPile = state.hands.__drawPile.slice(avg);
               }
             }
 
