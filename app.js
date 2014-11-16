@@ -31,7 +31,8 @@ una.server_mode.registerInitState({
     __communityPile: []
     // #playerid : [1,2,3,4]
     },
-    connectedPlayers: []
+    connectedPlayers: [],
+    playerNames : {}
 });
 
 function playerHasCards(state, playerId, cards) {
@@ -63,8 +64,13 @@ function moveCards(state, cards, fromPlayer, toPlayer) {
 una.server_mode.registerOnControllerConnection(function (UnaServer, socket) {
     console.log("Someone connected", socket);
     var state = UnaServer.getState();
-    state.hands[socket.id] = [];
-    state.connectedPlayers.push(socket.id);
+    if (socket.user_data.type == 'player') {
+        state.hands[socket.id] = [];
+        state.connectedPlayers.push(socket.id);
+        state.playerNames[socket.id] = socket.user_data.name;
+    } else if (socket.user_data.type == 'discard') {
+        // TODO
+    }
 });
 
 una.server_mode.registerOnControllerDisconnection(function (UnaServer, socket) {
