@@ -112,6 +112,8 @@ una.server_mode.registerOnControllerInput('resetDeck',
             for (var pile in state.hands) {
                 state.hands[pile] = [];
             }
+            state.hands.__discardPile = [];
+            state.hands.__communityPile = [];
 
             // Reconstruct __drawPile
             for (var i=0; i<52; i++){
