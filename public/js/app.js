@@ -91,6 +91,12 @@ function HandCtrl ($scope, $attrs) {
     });
   }
 
+  $scope.count = function() {
+    UnaController.sendToServer('count', {}, function (res) {
+      console.log('count', res);
+    });
+  }
+
   $scope.discardCards = function () {
     var cardsToDiscard = _.pluck(_.filter($scope.cards, function (card) {
       return card.selected;

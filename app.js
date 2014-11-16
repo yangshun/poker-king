@@ -65,7 +65,6 @@ una.server_mode.registerOnControllerConnection(function (UnaServer, socket) {
     console.log("Someone connected", socket);
     var state = UnaServer.getState();
     if (socket.user_data.type == 'player') {
-        console.log('player');
         state.hands[socket.id] = [];
         state.connectedPlayers.push(socket.id);
         state.playerNames[socket.id] = socket.user_data.name;
@@ -86,7 +85,8 @@ una.server_mode.registerOnControllerDisconnection(function (UnaServer, socket) {
         moveCards(state, state.hands[socket.id], socket.id, "__discardPile");
     }
     delete state.hands[socket.id];
-    state.connectedPlayers.splice(state.connectedPlayers.indexOf(socket.id), 1);
+    delete state.playerNames[socket.id];
+    state.connectedPlayers = state.connectedPlayers.splice(state.connectedPlayers.indexOf(socket.id), 1);
 });
 
 // Resets the drawPile with numDecks deck of cards. Zeros all other hands
@@ -154,6 +154,32 @@ una.server_mode.registerOnControllerInput('draw',
         });
 
 
+// Gets all the player names and their number of cards
+// Payload : {  }
+// Success : { success: true, count: {playerName1: 1, ...}}
+// Failure : { success: false }
+una.server_mode.registerOnControllerInput('count',
+        function(UnaServer, una_header, payload) {
+            var state = UnaServer.getState();
+            if (state.connectedPlayers.indexOf(una_header.id) === -1) {
+                return { success: false,
+                    error: "Player "+una_header.id+" is no longer connected" }
+
+            }
+
+            var res = {};
+            for (var i=0; i<state.connectedPlayers.length; i++) {
+              var playerId = state.connectedPlayers[i];
+              var playerName = state.playerNames[playerId];
+              var c = state.hands[playerId].length;
+              res[playerId] = c;
+            }
+            UnaServer.sendToControllers('update', state);
+            return { success: true, count: res };
+        });
+
+
+
 // Takes the cards in the __drawPile and distributes to every player evenly
 // #numDraw cards. Else the first t players will have 1 more card than the rest
 // Payload : { numDraw : 3 }
@@ -176,6 +202,7 @@ una.server_mode.registerOnControllerInput('distribute',
             UnaServer.sendToControllers('update', state);
             return { success: true };
         });
+
 
 // Takes the cards in the __drawPile and distributes to every player evenly
 // based on #players. Else the first t players will have 1 more card than the rest
@@ -200,7 +227,6 @@ una.server_mode.registerOnControllerInput('distributeEvenly',
                     state.hands[player] = state.hands.__drawPile.slice(0, low);
                     state.hands.__drawPile = state.hands.__drawPile.slice(low);
                   }
-                  console.log(state.hands);
               }
 
             } else {
