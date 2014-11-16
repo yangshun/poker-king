@@ -115,6 +115,14 @@ una.server_mode.registerOnControllerInput('resetDeck',
             state.hands.__drawPile = shuffle(state.hands.__drawPile);
 
             UnaServer.sendToControllers('update', state);
+
+            UnaServer.sendToControllers('discard', {
+                cards: state.hands.__discardPile,
+                discardPile: state.hands.__discardPile,
+                playerId: "",
+                playerName: ""
+              });
+
             return { success: true }
         });
 
