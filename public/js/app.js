@@ -73,7 +73,6 @@ function HandCtrl ($scope, $attrs) {
 
   $scope.resetDeck = function () {
     UnaController.sendToServer('resetDeck', {}, function (res) {
-
     });
   };
 
@@ -84,6 +83,11 @@ function HandCtrl ($scope, $attrs) {
 
   $scope.distributeCards = function (amt) {
     UnaController.sendToServer('distribute', {numDraw: amt}, function (res) {
+    });
+  }
+
+  $scope.distributeEvenly = function (amt) {
+    UnaController.sendToServer('distributeEvenly', {}, function (res) {
     });
   }
 
