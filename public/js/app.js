@@ -1,7 +1,6 @@
-function HandCtrl ($scope) {
+function HandCtrl ($scope, $attrs) {
+  $scope.loaded = true;
   $scope.mode = false;
-  $scope.loaded = true;;
-
 
   function createCards (cards) {
     return _.map(cards, function (card) {
@@ -100,4 +99,6 @@ function HandCtrl ($scope) {
 
     });
   }
+
+  if ($attrs.model == 'discard') $scope.startDiscard();
 }
