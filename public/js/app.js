@@ -84,9 +84,13 @@ function HandCtrl ($scope, $attrs) {
 
   $scope.drawCards = function (amt) {
     UnaController.sendToServer('draw', {numDraw: amt}, function (res) {
-
     });
   };
+
+  $scope.distributeCards = function (amt) {
+    UnaController.sendToServer('distribute', {numDraw: amt}, function (res) {
+    });
+  }
 
   $scope.discardCards = function () {
     var cardsToDiscard = _.pluck(_.filter($scope.cards, function (card) {
