@@ -13,10 +13,20 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
+
+            <div ng-show="!mode">
             <button class="btn btn-success" ng-click="startGame()">Start Game</button>
-            <button class="btn btn-danger" ng-click="resetDeck()">Reset Deck</button>
-            <button class="btn btn-warning" ng-click="discardCards()">Discard Cards</button>
-            <div id="button-draw-cards-container">
+            <button class="btn btn-success" ng-click="startDiscard()">Start Discard</button>
+            </div>
+
+            <div ng-show="mode == 'discard'">
+                <button class="btn btn-danger" ng-click="resetDeck()">Reset Deck</button>
+            </div>
+            <div ng-show="mode == 'player'">
+                <button class="btn btn-warning" ng-click="discardCards()">Discard Cards</button>
+            </div>
+
+            <div id="button-draw-cards-container" ng-show="mode == 'player'">
                 <div class="btn-group" role="group">
                     <button ng-repeat="number in [1,2,3,4,5]" type="button" class="btn btn-default" ng-click="drawCards(number)">
                         {{number}}

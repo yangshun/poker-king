@@ -1,5 +1,6 @@
 function HandCtrl ($scope) {
-  
+  $scope.mode = false;
+
   function createCards (cards) {
     return _.map(cards, function (card) {
       return {
@@ -46,8 +47,21 @@ function HandCtrl ($scope) {
 
   $scope.cards = createCards([]);
 
+  $scope.startDiscard = function() {
+    UnaController.register('room1', {name: 'deck', type: 'discard'}, function(res) {
+      UnaController.onServerInput('discard', function(res) {
+        $scope.mode = 'discard';
+        console.log($scope.mode);
+        $scope.cards = createCards(res.payload.cards);
+        $scope.$apply();
+      });
+    });
+  };
+
   $scope.startGame = function () {
-    UnaController.register('room1', {name: 'Iambot'}, function(res) { 
+    UnaController.register('room1', {name: 'Iambot', type: 'player'}, function(res) { 
+      $scope.mode = 'player';
+      $scope.$apply();
       UnaController.onServerInput('update', function (res) {
         UnaController.sendToServer('getMyHand', {}, function (res) {
           if (res.success) {

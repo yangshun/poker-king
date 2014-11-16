@@ -65,6 +65,7 @@ una.server_mode.registerOnControllerConnection(function (UnaServer, socket) {
     console.log("Someone connected", socket);
     var state = UnaServer.getState();
     if (socket.user_data.type == 'player') {
+        console.log('player');
         state.hands[socket.id] = [];
         state.connectedPlayers.push(socket.id);
         state.playerNames[socket.id] = socket.user_data.name;
@@ -81,7 +82,9 @@ una.server_mode.registerOnControllerConnection(function (UnaServer, socket) {
 una.server_mode.registerOnControllerDisconnection(function (UnaServer, socket) {
     console.log("Someone disconnected", socket);
     var state = UnaServer.getState();
-    moveCards(state, state.hands[socket.id], socket.id, "__discardPile");
+    if (state.hands[socket.id]) {
+        moveCards(state, state.hands[socket.id], socket.id, "__discardPile");
+    }
     delete state.hands[socket.id];
     state.connectedPlayers.splice(state.connectedPlayers.indexOf(socket.id), 1);
 });
