@@ -20,10 +20,15 @@
         <h2 class="black">{{cards.length}} card(s) in pile</h2>
       </div>
       <div class="discarded-cards-container">
-        <img ng-repeat="card in cards" class="card {{{true: 'card-selected'}[card.selected]}}" ng-src="img/{{getCardFromIndex(card)}}.png"} ng-click="card.selected = !card.selected" style="{{card.style}}">
+        <img ng-repeat="card in cards" class="card {{{true: 'card-selected'}[card.selected]}}" ng-src="img/{{getCardFromIndex(card)}}.png"} style="{{card.style}}">
       </div>
       
     </div>
+  </div>
+
+
+  <div ng-repeat="player in players">
+      <b>{{player.name}}</b>: {{player.cards.length}}
   </div>
 </div>
 

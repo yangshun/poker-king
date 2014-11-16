@@ -2,6 +2,31 @@ function HandCtrl ($scope, $attrs) {
   $scope.loaded = true;
   $scope.mode = 'player';
 
+  // http://stackoverflow.com/questions/7666516/fancy-name-generator-in-node-js
+  function haiku(){
+    var adjs = ["autumn", "hidden", "bitter", "misty", "silent", "empty", "dry",
+    "dark", "summer", "icy", "delicate", "quiet", "white", "cool", "spring",
+    "winter", "patient", "twilight", "dawn", "crimson", "wispy", "weathered",
+    "blue", "billowing", "broken", "cold", "damp", "falling", "frosty", "green",
+    "long", "late", "lingering", "bold", "little", "morning", "muddy", "old",
+    "red", "rough", "still", "small", "sparkling", "throbbing", "shy",
+    "wandering", "withered", "wild", "black", "young", "holy", "solitary",
+    "fragrant", "aged", "snowy", "proud", "floral", "restless", "divine",
+    "polished", "ancient", "purple", "lively", "nameless"]
+  
+    , nouns = ["waterfall", "river", "breeze", "moon", "rain", "wind", "sea",
+    "morning", "snow", "lake", "sunset", "pine", "shadow", "leaf", "dawn",
+    "glitter", "forest", "hill", "cloud", "meadow", "sun", "glade", "bird",
+    "brook", "butterfly", "bush", "dew", "dust", "field", "fire", "flower",
+    "firefly", "feather", "grass", "haze", "mountain", "night", "pond",
+    "darkness", "snowflake", "silence", "sound", "sky", "shape", "surf",
+    "thunder", "violet", "water", "wildflower", "wave", "water", "resonance",
+    "sun", "wood", "dream", "cherry", "tree", "fog", "frost", "voice", "paper",
+    "frog", "smoke", "star"];
+  
+    return adjs[Math.floor(Math.random()*(adjs.length-1))]+"_"+nouns[Math.floor(Math.random()*(nouns.length-1))];
+  }
+
   function createCards (cards, discard) {
     var i = 0;
     return _.map(cards, function (card) {
@@ -49,13 +74,21 @@ function HandCtrl ($scope, $attrs) {
 
   $scope.cards = createCards([]);
 
+  $scope.players = [];
   $scope.startDiscard = function() {
     UnaController.register('room1', {name: 'deck', type: 'discard'}, function(res) {
       $scope.cards = createCards(res.cards);
       $scope.$apply();
+
+      UnaController.onServerInput('update', function(res) {
+        $scope.players = res.payload.connectedPlayers.map(function(playerId) {
+            return {id: playerId, name: res.payload.playerNames[playerId], cards: res.payload.hands[playerId]};
+        });
+        $scope.$apply();
+      });
+
       UnaController.onServerInput('discard', function(res) {
         $scope.mode = 'discard';
-        console.log(res.payload.discardPile);
         $scope.cards = createCards(res.payload.discardPile, true);
         var newCards = res.payload.cards;
         _.each($scope.cards, function (card) {
@@ -71,11 +104,13 @@ function HandCtrl ($scope, $attrs) {
   };
 
   $scope.startGame = function () {
-    UnaController.register('room1', {name: 'Iambot', type: 'player'}, function(res) { 
+    var name = haiku();
+    $scope.playerName = name;
+    UnaController.register('room1', {name: name, type: 'player'}, function(res) { 
       $scope.mode = 'player';
       $scope.$apply();
       UnaController.onServerInput('update', function (res) {
-        UnaController.sendToServer('getMyHand', {}, function (res) {
+                UnaController.sendToServer('getMyHand', {}, function (res) {
           if (res.success) {
             $scope.cards = createCards(res.hand);
             $scope.$apply();
@@ -102,6 +137,12 @@ function HandCtrl ($scope, $attrs) {
 
   $scope.distributeEvenly = function (amt) {
     UnaController.sendToServer('distributeEvenly', {}, function (res) {
+    });
+  }
+
+  $scope.count = function() {
+    UnaController.sendToServer('count', {}, function (res) {
+      console.log('count', res);
     });
   }
 
