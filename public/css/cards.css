@@ -29,7 +29,7 @@
   display: inline-block;
   margin: 0 10px;
   position: absolute;
-  width: 40%;
+  width: 150px;
   transition: all .3s;
   z-index: 100;
 }
@@ -47,7 +47,7 @@
   transform: translateY(-50px);
 }
 
-.container {
+.container-fluid {
   visibility: hidden;
 }
 

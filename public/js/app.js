@@ -2,10 +2,13 @@ function HandCtrl ($scope, $attrs) {
   $scope.loaded = true;
   $scope.mode = 'player';
 
-  function createCards (cards) {
+  function createCards (cards, discard) {
     var i = 0;
     return _.map(cards, function (card) {
-      var style = 'left: ' + i * 10 + '%';
+      var style = 'left: ' + i * 30 + 'px';
+      if (discard) {
+        style += '; z-index: ' + (100 - i) + ';';
+      }
       console.log(style);
       i++;
       return {
@@ -28,8 +31,11 @@ function HandCtrl ($scope, $attrs) {
     return l;
   };
 
-  $scope.getCardFromIndex = function (index) {
-    index = parseInt(index);
+  $scope.getCardFromIndex = function (card) {
+    if (card.facedown) {
+      return 'facedown';
+    }
+    index = parseInt(card.number);
     if (index < 52) {
       var suits = ['C', 'D', 'H', 'S'];
       var ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
@@ -50,7 +56,15 @@ function HandCtrl ($scope, $attrs) {
       UnaController.onServerInput('discard', function(res) {
         $scope.mode = 'discard';
         console.log(res.payload.discardPile);
-        $scope.cards = createCards(res.payload.discardPile);
+        $scope.cards = createCards(res.payload.discardPile, true);
+        var newCards = res.payload.cards;
+        _.each($scope.cards, function (card) {
+          if ($.inArray(card.number, newCards) > -1) {
+            card.facedown = false;
+          } else {
+            card.facedown = true;
+          }
+        });
         $scope.$apply();
       });
     });
