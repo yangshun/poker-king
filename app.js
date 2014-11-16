@@ -19,6 +19,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //app.get('/controller', routes.controller);
 
+app.get('/game', function(req, res) {
+    res.sendfile('public/discard.html');
+});
+
+app.get('/', function(req, res) {
+    res.sendfile('public/text.html');
+});
+
+
 // Enable screenless
 una.enableServerMode();
 
