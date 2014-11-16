@@ -22,6 +22,11 @@
       <button class="btn btn-success btn-block" ng-click="distributeEvenly()">Distribute 13</button>
     </div>
   </div>
+
+
+  <div ng-repeat="player in players">
+      <b>{{player.name}}</b>: {{player.cards.length}}
+  </div>
 </div>
 
 <script src="bower_components/underscore/underscore-min.js"></script>

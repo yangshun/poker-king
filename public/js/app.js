@@ -74,13 +74,21 @@ function HandCtrl ($scope, $attrs) {
 
   $scope.cards = createCards([]);
 
+  $scope.players = [];
   $scope.startDiscard = function() {
     UnaController.register('room1', {name: 'deck', type: 'discard'}, function(res) {
       $scope.cards = createCards(res.cards);
       $scope.$apply();
+
+      UnaController.onServerInput('update', function(res) {
+        $scope.players = res.payload.connectedPlayers.map(function(playerId) {
+            return {id: playerId, name: res.payload.playerNames[playerId], cards: res.payload.hands[playerId]};
+        });
+        $scope.$apply();
+      });
+
       UnaController.onServerInput('discard', function(res) {
         $scope.mode = 'discard';
-        console.log(res.payload.discardPile);
         $scope.cards = createCards(res.payload.discardPile, true);
         var newCards = res.payload.cards;
         _.each($scope.cards, function (card) {
@@ -100,7 +108,7 @@ function HandCtrl ($scope, $attrs) {
       $scope.mode = 'player';
       $scope.$apply();
       UnaController.onServerInput('update', function (res) {
-        UnaController.sendToServer('getMyHand', {}, function (res) {
+                UnaController.sendToServer('getMyHand', {}, function (res) {
           if (res.success) {
             $scope.cards = createCards(res.hand);
             $scope.$apply();
