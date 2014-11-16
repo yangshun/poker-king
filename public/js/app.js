@@ -49,10 +49,12 @@ function HandCtrl ($scope) {
 
   $scope.startDiscard = function() {
     UnaController.register('room1', {name: 'deck', type: 'discard'}, function(res) {
+      $scope.cards = createCards(res.cards);
+      $scope.$apply();
       UnaController.onServerInput('discard', function(res) {
         $scope.mode = 'discard';
-        console.log($scope.mode);
-        $scope.cards = createCards(res.payload.cards);
+        console.log(res.payload.discardPile);
+        $scope.cards = createCards(res.payload.discardPile);
         $scope.$apply();
       });
     });

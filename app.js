@@ -51,7 +51,7 @@ function moveCards(state, cards, fromPlayer, toPlayer) {
         return false;
     }
 
-    state.hands[toPlayer] = _.extend(state.hands[toPlayer], cards);
+    state.hands[toPlayer] = _.union(cards, state.hands[toPlayer]);
 
     state.hands[fromPlayer] = state.hands[fromPlayer].filter(
             function (e) {
@@ -71,7 +71,7 @@ una.server_mode.registerOnControllerConnection(function (UnaServer, socket) {
         state.playerNames[socket.id] = socket.user_data.name;
     } else if (socket.user_data.type == 'discard') {
         UnaServer.sendToControllers('discard', {
-          cards: [],
+          cards: state.hands.__discardPile,
           discardPile: state.hands.__discardPile,
           playerId: "",
           playerName: ""
