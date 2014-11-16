@@ -184,6 +184,7 @@ una.server_mode.registerOnControllerInput('distribute',
 // Failure : { success: false }
 una.server_mode.registerOnControllerInput('distributeEvenly',
         function(UnaServer, una_header, payload) {
+            console.log("[DISTRIBUTE]");
             var state = UnaServer.getState();
             var avg = state.hands.__drawPile.length / state.connectedPlayers.length;
             if (avg != Math.floor(avg)) {
