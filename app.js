@@ -170,18 +170,12 @@ una.server_mode.registerOnControllerInput('draw',
 una.server_mode.registerOnControllerInput('count',
         function(UnaServer, una_header, payload) {
             var state = UnaServer.getState();
-            if (state.connectedPlayers.indexOf(una_header.id) === -1) {
-                return { success: false,
-                    error: "Player "+una_header.id+" is no longer connected" }
-
-            }
-
             var res = {};
             for (var i=0; i<state.connectedPlayers.length; i++) {
               var playerId = state.connectedPlayers[i];
               var playerName = state.playerNames[playerId];
               var c = state.hands[playerId].length;
-              res[playerId] = c;
+              res[playerName] = c;
             }
             UnaServer.sendToControllers('update', state);
             return { success: true, count: res };
