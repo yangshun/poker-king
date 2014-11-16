@@ -1,3 +1,12 @@
+.background {
+  background-image: url('../img/hackSH.png');
+  background-size: cover;
+}
+
+.black {
+  color: #000;
+}
+
 .title {
   color: #000;
   font-weight: bold;
@@ -5,7 +14,7 @@
 }
 
 .cards-container {
-  height: 300px;
+  height: 270px;
   margin-bottom: 50px;
   overflow-x: scroll;
   overflow-y: visible;
@@ -13,7 +22,7 @@
 }
 
 .discarded-cards-container {
-  height: 300px;
+  height: 270px;
   margin-bottom: 50px;
   overflow-x: scroll;
   overflow-y: visible;
@@ -45,6 +54,15 @@
   -moz-box-shadow: 0px 0px 15px 0px #00bc8c;
   box-shadow: 0px 0px 15px 0px #00bc8c;
   transform: translateY(-50px);
+}
+
+.logo {
+  display: block;
+  margin: 30px auto;
+}
+
+.btn-containers {
+  text-align: center;
 }
 
 .container, .container-fluid {

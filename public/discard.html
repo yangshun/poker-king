@@ -8,18 +8,21 @@
 <link rel="stylesheet" href="css/cards.css" />
 </head>
 
-<body ng-controller="HandCtrl" model="discard">
-<nav class="navbar navbar-inverse" role="navigation">
-    <h3 class="title">Poker King</h3>
-</nav>
+<body ng-controller="HandCtrl" model="discard" class="background">
 <div class="container-fluid" ng-class="{'container-loaded': loaded}">
   <div class="row">
     <div class="col-md-6 col-md-offset-3">
+
+      <img src="img/logo.png" class="img-responsive logo" width="400">
+      <div class="btn-containers">
+        <button class="btn btn-danger" ng-click="resetDeck()">Reset Deck</button>
+        <button class="btn btn-success" ng-click="distributeEvenly()">Distribute 13</button>
+        <h2 class="black">{{cards.length}} card(s) in pile</h2>
+      </div>
       <div class="discarded-cards-container">
         <img ng-repeat="card in cards" class="card {{{true: 'card-selected'}[card.selected]}}" ng-src="img/{{getCardFromIndex(card)}}.png"} ng-click="card.selected = !card.selected" style="{{card.style}}">
       </div>
-      <button class="btn btn-danger btn-block" ng-click="resetDeck()">Reset Deck</button>
-      <button class="btn btn-success btn-block" ng-click="distributeEvenly()">Distribute 13</button>
+      
     </div>
   </div>
 </div>

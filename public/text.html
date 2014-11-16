@@ -9,11 +9,8 @@
 </head>
 
 <body ng-controller="HandCtrl">
-<nav class="navbar navbar-inverse" role="navigation">
-    <h3 class="title">Poker King</h3>
-</nav>
+<img src="img/logo.png" class="img-responsive logo" width="280">
 <div class="container-fluid" ng-class="{'container-loaded': loaded}">
-
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
 
@@ -26,16 +23,24 @@
                 <button class="btn btn-danger" ng-click="resetDeck()">Reset Deck</button>
             </div>
 
-            <div id="button-draw-cards-container row" ng-show="mode == 'player'">
-                <div class="col-md-4">
+            <div id="button-draw-cards-container" class="row" ng-show="mode == 'player'">
+                <div class="col-md-3">
                     Draw Cards:
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-9">
                     <div class="btn-group" role="group">
                         <button ng-repeat="number in [1,2,3,4,5]" type="button" class="btn btn-default" ng-click="drawCards(number)">
                             {{number}}
                         </button>
                     </div>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>{{cards.length}} card(s) in hand</h2>
                 </div>
             </div>
 
